@@ -94,12 +94,11 @@ A custom transport function can be defined in the configuration object.
 
 ### Browser Compatibility
 
-**browser-logger** has be tested on Chrome, Firefox,
-
+The logger has be tested on Chrome, Firefox and MS Edge
 
 #### Source maps
 
-To resolve module and line numbers correctly *sourcemaps* must be
+To resolve module and line numbers correctly *source-maps* must be
 enabled in the development build.
 
 ### Prior work

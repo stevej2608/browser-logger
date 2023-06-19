@@ -1,5 +1,5 @@
 {
-  "name": "browser-logger",
+  "name": "@holinx/browser-logger",
   "version": "0.0.1",
   "description": "This is a simple utility package",
   "author": "Steve Jones",
