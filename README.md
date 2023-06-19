@@ -22,7 +22,7 @@ The logger has the following useful features:
 ```
 ### Usage
 
-    npm install browser-logger
+    npm install @holinx/browser-logger
 
 *./utils/logger.ts*
 ```
