@@ -17,7 +17,7 @@ import { sprintf } from 'sprintf-js'
 import { tim } from './tinytim'
 import { PromiseQueue } from './PromiseQueue'
 
-// export enum ILevel {
+// export enum LogLevelRange {
 //   LOG = "log",
 //   TRACE = "trace",
 //   DEBUG = "debug",
@@ -27,16 +27,18 @@ import { PromiseQueue } from './PromiseQueue'
 //   FATAL = "fatal"
 // }
 
-export enum ILevel {
-  LOG = 1,
-  TRACE,
-  DEBUG,
-  INFO,
-  WARN,
-  ERROR,
-  FATAL
-}
+type LogLevelRange = number
 
+const LogLevel = {
+  LOG: 1,
+  TRACE: 2,
+  DEBUG: 3,
+  INFO: 4,
+  WARN: 5,
+  ERROR: 6,
+  FATAL: 7
+}
+Object.freeze(LogLevel)
 
 export interface ITransport {
   title: 'warn' | 'error' | 'info'
@@ -45,7 +47,7 @@ export interface ITransport {
 }
 
 interface ILogProps {
-  level: ILevel
+  level: LogLevelRange
   msg: string
   index?: number
   errorStack?: Error
@@ -62,10 +64,12 @@ export interface Config {
   transport?: (data: ITransport) => any
 
   filters?: ((...args: any[]) => any)[]
-  level?: ILevel
+  level?: LogLevelRange
   // methods?: string[]
   stackIndex?: number
 }
+
+const titles = ["", "LOG", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"]
 
 const defaultConfig: Config = {
   rootDir: '',
@@ -82,7 +86,7 @@ const defaultConfig: Config = {
   },
 
   transport: function (data: ITransport) {
-    if (data.title === ILevel[ILevel.WARN]) {
+    if (data.level === LogLevel.WARN) {
       queueMicrotask(console.log.bind(console, `%c${data.output}`, "color:yellow"))
     } else if (data.level > 4) {
       queueMicrotask(console.log.bind(console, `%c${data.output}`, "color:red"))
@@ -92,7 +96,7 @@ const defaultConfig: Config = {
   },
 
   filters: [],
-  level: ILevel.INFO,
+  level: LogLevel.INFO,
   stackIndex: 0
 }
 
@@ -107,20 +111,20 @@ const stackRegex3 = /.*?@()(.*):(\d*):(\d*)/i
  *
  */
 
-export class BrowserLog {
+class BrowserLog {
 
   config: Config
   needStack: boolean
   logIndex: number
   queue: PromiseQueue
-  level: ILevel
+  level: LogLevelRange
 
   constructor(userConfig: Config = {}) {
     this.config = { ...defaultConfig, ...userConfig }
     this.needStack = /{{(method|path|line|pos|file|folder|stack)}}/i.test(this.config.format)
     this.logIndex = 0
     this.queue = new PromiseQueue()
-    this.level = this.level || ILevel.INFO
+    this.level = this.level || LogLevel.INFO
   }
 
   private async logMain(args: ILogProps) {
@@ -130,7 +134,7 @@ export class BrowserLog {
       timestamp: dateFormat(new Date(), config.dateformat),
       index: sprintf(this.config.indexFormat, ++this.logIndex),
       message: '',
-      title: ILevel[level],
+      title: titles[level],
       level: level,
       method: '',
       path: '',
@@ -231,47 +235,49 @@ export class BrowserLog {
   }
 
   public log(format: string, ...args: any[]) {
-    if (ILevel.LOG < this.level) return
+    if (LogLevel.LOG < this.level) return
     const msg = sprintf(format, ...args)
-    this.queueLogMessage({ level: ILevel.LOG, msg })
+    this.queueLogMessage({ level: LogLevel.LOG, msg })
   }
 
   public trace(format: string, ...args: any[]) {
-    if (ILevel.TRACE < this.level) return
+    if (LogLevel.TRACE < this.level) return
     const msg = sprintf(format, ...args)
-    this.queueLogMessage({ level: ILevel.TRACE, msg })
+    this.queueLogMessage({ level: LogLevel.TRACE, msg })
   }
 
   public debug(format: string, ...args: any[]) {
-    if (ILevel.DEBUG < this.level) return
+    if (LogLevel.DEBUG < this.level) return
     const msg = sprintf(format, ...args)
-    this.queueLogMessage({ level: ILevel.DEBUG, msg })
+    this.queueLogMessage({ level: LogLevel.DEBUG, msg })
   }
 
   public info(format: string, ...args: any[]) {
-    if (ILevel.INFO < this.level) return
+    if (LogLevel.INFO < this.level) return
     const msg = sprintf(format, ...args)
-    this.queueLogMessage({ level: ILevel.INFO, msg })
+    this.queueLogMessage({ level: LogLevel.INFO, msg })
   }
 
   public warn(format: string, ...args: any[]) {
-    if (ILevel.WARN < this.level) return
+    if (LogLevel.WARN < this.level) return
     const msg = sprintf(format, ...args)
-    this.queueLogMessage({ level: ILevel.WARN, msg })
+    this.queueLogMessage({ level: LogLevel.WARN, msg })
   }
 
   public error(format: string, ...args: any[]) {
-    if (ILevel.ERROR < this.level) return
+    if (LogLevel.ERROR < this.level) return
     const msg = sprintf(format, ...args)
-    this.queueLogMessage({ level:ILevel.ERROR, msg })
+    this.queueLogMessage({ level:LogLevel.ERROR, msg })
   }
 
   public fatal(format: string, ...args: any[]) {
     const msg = sprintf(format, ...args)
-    this.queueLogMessage({ level: ILevel.FATAL, msg })
+    this.queueLogMessage({ level: LogLevel.FATAL, msg })
   }
 
-  public setLevel(level: ILevel) {
+  public setLevel(level: LogLevelRange) {
     this.level = level
   }
 }
+
+export { BrowserLog, LogLevel }

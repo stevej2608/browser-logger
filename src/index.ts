@@ -1,4 +1,3 @@
-import { BrowserLog } from './BrowserLog'
-import type  { ILevel, Config } from './BrowserLog'
-
-export { BrowserLog, ILevel, Config }
+import { BrowserLog, LogLevel, Config } from './BrowserLog'
+export { BrowserLog, LogLevel }
+export type { Config }

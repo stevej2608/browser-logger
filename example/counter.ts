@@ -6,6 +6,7 @@ export function setupCounter(element: HTMLButtonElement) {
   const setCounter = (count: number) => {
 
     logger.info('setCounter(%d)', count)
+    logger.warn('setCounter(%d)', count)
 
     counter = count
     element.innerHTML = `count is ${counter}`
