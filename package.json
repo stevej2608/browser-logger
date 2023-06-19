@@ -3,13 +3,30 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "./dist/browser_logger.cjs",
+  "module": "./dist/browser_logger.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/browser_logger.js",
+      "require": "./dist/browser_logger.cjs"
+    }
+  },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 3000",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "rm -rf ./public/*"
   },
   "devDependencies": {
+    "@types/node": "^20.3.1",
     "typescript": "^5.0.2",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "vite-plugin-dts": "^2.3.0"
+  },
+  "dependencies": {
+    "dateformat": "^5.0.3",
+    "sprintf-js": "^1.1.2",
+    "stacktracey": "^2.1.8"
   }
 }
