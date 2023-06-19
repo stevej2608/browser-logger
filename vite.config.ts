@@ -11,7 +11,7 @@ export default defineConfig(({ command, mode }) => {
       minify: ['serve', 'dev'].includes(command) ? false : false,
 
       lib: {
-        entry: resolve(__dirname, 'src/browser_logger/index.ts'),
+        entry: resolve(__dirname, 'src/index.ts'),
         name: 'browser_logger',
         fileName: 'browser_logger',
       },

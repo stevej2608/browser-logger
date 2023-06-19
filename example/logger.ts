@@ -1,4 +1,4 @@
-import { BrowserLog } from './browser_logger/BrowserLog'
+import { BrowserLog } from '../src'
 
 export const logger = new BrowserLog({
   format: '{{index}} {{timestamp}} {{title}} {{message}}{{rhs}}{{file}}:{{line}}',

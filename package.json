@@ -1,6 +1,17 @@
 {
   "name": "browser-logger",
   "version": "0.0.1",
+  "description": "This is a simple utility package",
+  "author": "Steve Jones",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stevej2608/browser-logger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stevej2608/browser-logger/issues"
+  },
+  "keywords": ["browser", "logging"],
   "type": "module",
   "main": "./dist/browser_logger.cjs",
   "module": "./dist/browser_logger.js",
@@ -19,7 +30,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "publish": "npm pack --dry-run",
-    "clean": "rm -rf ./public/*"
+    "clean": "rm -rf ./dist/*"
   },
   "devDependencies": {
     "@types/node": "^20.3.1",
