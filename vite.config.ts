@@ -8,7 +8,7 @@ export default defineConfig(({ command, mode }) => {
     build: {
 
       sourcemap: ['serve', 'dev'].includes(command) ? true : false,
-      minify: ['serve', 'dev'].includes(command) ? false : true,
+      minify: ['serve', 'dev'].includes(command) ? false : false,
 
       lib: {
         entry: resolve(__dirname, 'src/browser_logger/index.ts'),

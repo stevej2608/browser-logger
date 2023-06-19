@@ -1,11 +1,15 @@
 {
   "name": "browser-logger",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "main": "./dist/browser_logger.cjs",
   "module": "./dist/browser_logger.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist/*",
+    "src/browser_logger/*"
+  ],
   "exports": {
     ".": {
       "import": "./dist/browser_logger.js",

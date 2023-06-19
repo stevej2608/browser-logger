@@ -14,7 +14,7 @@ import StackTracey from 'stacktracey'
 import dateFormat from 'dateformat'
 import { sprintf } from 'sprintf-js'
 
-import { tim, ILookupDict } from './tinytim'
+import { tim } from './tinytim'
 import { PromiseQueue } from './PromiseQueue'
 
 // export enum ILevel {
@@ -222,7 +222,7 @@ export class BrowserLog {
     }
 
     this.queue.enqueue(() => this.logMain(args))
-      .then(data => {
+      .then(() => {
         // NO ACTION
       })
       .catch(error => {
