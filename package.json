@@ -1,6 +1,6 @@
 {
-  "name": "@holinx/browser-logger",
-  "version": "0.0.1",
+  "name": "@holonix/browser-logger",
+  "version": "0.0.2",
   "description": "This is a simple utility package",
   "author": "Steve Jones",
   "license": "MIT",
