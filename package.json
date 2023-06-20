@@ -1,6 +1,6 @@
 {
   "name": "@holonix/browser-logger",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "This is a simple utility package",
   "author": "Steve Jones",
   "license": "MIT",
@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/stevej2608/browser-logger/issues"
   },
-  "keywords": ["browser", "logging"],
+  "keywords": ["browser", "trace", "log", "logging"],
   "type": "module",
   "main": "./dist/browser_logger.cjs",
   "module": "./dist/browser_logger.js",

@@ -8,7 +8,7 @@ export default defineConfig(({ command, mode }) => {
     build: {
 
       sourcemap: ['serve', 'dev'].includes(command) ? true : false,
-      minify: ['serve', 'dev'].includes(command) ? false : false,
+      minify: ['serve', 'dev'].includes(command) ? false : true,
 
       lib: {
         entry: resolve(__dirname, 'src/index.ts'),

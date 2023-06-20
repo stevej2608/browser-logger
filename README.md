@@ -37,6 +37,7 @@ export const logger = new BrowserLog({
 export { logger, LogLevel }
 ```
 
+*./mycode.ts*
 ```
 import { logger, LogLevel } from './utils/logger'
 
