@@ -26,7 +26,7 @@ export const tim = (template: string, data: Object): string => {
       lookup = (lookup as ILookupDict)[tok]
 
       if (lookup === undefined) {
-        throw new Error(`tim: '${lookup}' not found in ${tag}`)
+        throw new Error(`tok: '${lookup}' not found in ${tag}`)
       }
 
     }

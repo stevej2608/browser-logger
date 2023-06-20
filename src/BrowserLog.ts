@@ -48,6 +48,7 @@ const titles: ILogTitles[] = ["LOG", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", 
 export interface ITransport {
   title: ILogTitles
   level: number
+  message: string
   output: string
   timestamp: string
   index: string
@@ -155,7 +156,8 @@ class BrowserLog {
     const data: ITransport = {
       title: titles[level - 1],
       level: level,
-      output: msg,
+      message: msg,
+      output: '',
       timestamp: dateFormat(new Date(), config.dateformat),
       index: sprintf(this.config.indexFormat, ++this.logIndex),
 

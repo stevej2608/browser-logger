@@ -22,11 +22,11 @@ The logger has the following useful features:
 ```
 ### Usage
 
-    npm install @holinx/browser-logger
+    npm install @holonix/browser-logger
 
 *./utils/logger.ts*
 ```
-import { BrowserLog, LogLevel } from 'browser-logger'
+import { BrowserLog, LogLevel } from '@holonix/browser-logger'
 
 export const logger = new BrowserLog({
   format: '{{index}} {{timestamp}} {{title}} {{message}}{{rhs}}{{file}}:{{line}}',
