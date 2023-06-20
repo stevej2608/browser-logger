@@ -48,6 +48,10 @@ logger.warn('Add token [%s ...]', 'mytoken')
 // Change logging level
 
 logger.setLevel(LogLevel.WARN)
+
+// Disable logging
+
+logger.setLevel(LogLevel.DISABLED)
 ```
 
 ### Fields
@@ -107,6 +111,16 @@ transport is shown below:
     }
   }
 ```
+
+### Enable/Disable Logging
+
+Logging can be disabled by setting the log level to one level above the
+maximum valid/expected log level. This can be done in the initial logger configuration or
+at a later point by calling:
+
+    logger.setLevel(LogLevel.DISABLED)
+
+Logging can be reenabled at any point.
 
 ### Browser Compatibility
 

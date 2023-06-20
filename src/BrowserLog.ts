@@ -36,11 +36,12 @@ const LogLevel = {
   INFO: 4,
   WARN: 5,
   ERROR: 6,
-  FATAL: 7
+  FATAL: 7,
+  DISABLED: 8
 }
 Object.freeze(LogLevel)
 
-type ILogTitles = 'LOG' | 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL'
+type ILogTitles = 'LOG' | 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL' | 'DISABLED'
 
 const titles: ILogTitles[] = ["LOG", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"]
 
@@ -284,6 +285,7 @@ class BrowserLog {
   }
 
   public fatal(format: string, ...args: any[]) {
+    if (LogLevel.DISABLED < this.level) return
     const msg = sprintf(format, ...args)
     this.queueLogMessage({ level: LogLevel.FATAL, msg })
   }
