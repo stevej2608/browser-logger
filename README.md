@@ -50,32 +50,50 @@ logger.warn('Add token [%s ...]', 'mytoken')
 logger.setLevel(LogLevel.WARN)
 ```
 
-#### Fields
+### Fields
 
 The configuration *format* field is a string containing any combination, in any order, of the
 following fields:
 
-**{{timestamp}}**: time of log message, format can be changed by changing the configuration [dateformat] field.
-
-**{{index}}**: log message count, format can be changed by changing the configuration *indexFormat* field.
-
-**{{title}}**: log message level:   LOG, TRACE, DEBUG, INFO, WARN, ERROR, FATAL
-
-**{{message}}**: the user supplied log message
-
-**{{rhs}}**: pushes any following fields to the right hand side
+**{{callee}}**: the log message callee, resolved from source-map
 
 **{{file}}**: the log message module name, resolved from source-map
 
+**{{index}}**: log message count, format can be changed by changing the configuration *indexFormat* field.
+
 **{{line}}**: the log message module line number, resolved from source-map
+
+**{{message}}**: the user supplied log message
+
+**{{pos}}**: the log message module column number, resolved from source-map
+
+**{{rhs}}**: A valueless token, pushes any following fields to the right hand side
+
+**{{timestamp}}**: time of log message, format can be changed by changing the configuration [dateformat] field.
+
+**{{title}}**: log message level:   LOG, TRACE, DEBUG, INFO, WARN, ERROR, FATAL
+
 
 For example:
 
     format: '{{timestamp}} {{message}}{{rhs}}{{file}}:{{line}}'
 
-#### Transport
 
-The log message, fully composed, is passed to a transport function for display. The default
+### Additional Configuration
+
+The configuration object has the following additional fields.
+
+**charactersPerLine**: max number of characters in formatted log message (default: 180)
+
+**preprocess**: allows for custom message preprocessing prior to transport
+
+**level**: the logging level, all log message of a lower level will be dismissed (default: LogLevel.INFO)
+
+**stackIndex**: allow for intervening functions between the origin of the log message and the
+final call to the logger. For each function add one to stackIndex
+
+**transport**: The log message, fully composed, is finally passed to a transport function
+for display. A custom transport function can be defined. The default
 transport is shown below:
 
 ```
@@ -89,8 +107,6 @@ transport is shown below:
     }
   }
 ```
-
-A custom transport function can be defined in the configuration object.
 
 ### Browser Compatibility
 

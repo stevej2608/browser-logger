@@ -40,10 +40,23 @@ const LogLevel = {
 }
 Object.freeze(LogLevel)
 
+type ILogTitles = 'LOG' | 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL'
+
+const titles: ILogTitles[] = ["LOG", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"]
+
 export interface ITransport {
-  title: 'warn' | 'error' | 'info'
+  title: ILogTitles
   level: number
   output: string
+  timestamp: string
+  index: string
+
+  // source-maps provided
+
+  callee: string,
+  file: string,
+  line: number,
+  pos: number,
 }
 
 interface ILogProps {
@@ -54,25 +67,21 @@ interface ILogProps {
 }
 
 export interface Config {
-  rootDir?: string
+
   format?: string
   dateformat?: string
   indexFormat?: string
 
   charactersPerLine?: () => number
-  preprocess?: (...args: any[]) => any
+  preprocess?: (data: ITransport) => void
   transport?: (data: ITransport) => any
 
-  filters?: ((...args: any[]) => any)[]
   level?: LogLevelRange
-  // methods?: string[]
   stackIndex?: number
 }
 
-const titles = ["", "LOG", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"]
 
 const defaultConfig: Config = {
-  rootDir: '',
   format: '{{timestamp}} <{{title}}>{{rhs}}{{file}}:{{line}}',
   dateformat: 'isoDateTime',
   indexFormat: "%03s",
@@ -95,7 +104,6 @@ const defaultConfig: Config = {
     }
   },
 
-  filters: [],
   level: LogLevel.INFO,
   stackIndex: 0
 }
@@ -127,22 +135,33 @@ class BrowserLog {
     this.level = this.level || LogLevel.INFO
   }
 
+  /**
+   * The log message passed in by the called has been expanded. We now
+   * need to reference the source-maps add the internal
+   * fields (index, timestamp, etc)
+   *
+   * This method is asynchronous due to the dynamic nature of
+   * source map resolution
+   *
+   * @param args
+   * @returns
+   */
+
   private async logMain(args: ILogProps) {
     const { level, msg, errorStack } = args
     const config = this.config
-    const data = {
+
+    const data: ITransport = {
+      title: titles[level - 1],
+      level: level,
+      output: msg,
       timestamp: dateFormat(new Date(), config.dateformat),
       index: sprintf(this.config.indexFormat, ++this.logIndex),
-      message: '',
-      title: titles[level],
-      level: level,
-      method: '',
-      path: '',
+
+      callee: '',
+      file : '',
       line: 0,
       pos: 0,
-      file : '',
-      folder: '',
-      output: ''
     }
 
     if (this.needStack) {
@@ -150,9 +169,7 @@ class BrowserLog {
       // Pop the recent frames, so stackList[0] will be the
       // log message call
       //
-      // Some stack dumps start with an error line, others don't
-
-      // console.log('%s', errorStack.stack)
+      // Some browser stack dumps start with an error line, others don't
 
       const drop = errorStack.stack.startsWith('Error') ? 3 : 2
 
@@ -179,11 +196,9 @@ class BrowserLog {
         const stack = new StackTracey(logLoc)
         const top = (await stack.withSourcesAsync()).items[0]
 
-        data.method = top.callee
-        data.path = locationRecord[2]
+        data.callee = top.callee
         data.line = top.line
         data.pos = top.column
-        data.folder = top.fileShort
         data.file = './' + top.fileShort
       }
       else {
@@ -192,8 +207,6 @@ class BrowserLog {
     }
 
     config.preprocess(data)
-
-    data.message = msg
 
     const fmt: string[] = config.format.split('{{rhs}}')
 
